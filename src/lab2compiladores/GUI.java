@@ -32,8 +32,6 @@ public class GUI extends javax.swing.JFrame {
      */
     public GUI() {
         initComponents();
-        this.tablaReconToggle.setVisible(false);
-        this.tablaReconToggle.setText("Volver a tabla M");
     }
 
     /**
@@ -63,7 +61,6 @@ public class GUI extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        tablaReconToggle = new javax.swing.JToggleButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -124,16 +121,6 @@ public class GUI extends javax.swing.JFrame {
         jLabel5.setText("Tabla M:");
         jLabel5.setToolTipText("");
 
-        tablaReconToggle.setSelected(true);
-        tablaReconToggle.setText("Ver Tabla M");
-        tablaReconToggle.setToolTipText("");
-        tablaReconToggle.setActionCommand("");
-        tablaReconToggle.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tablaReconToggleActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -151,11 +138,12 @@ public class GUI extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(tablaReconToggle))
+                        .addComponent(DirField, javax.swing.GroupLayout.PREFERRED_SIZE, 456, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel3)
                                 .addGap(262, 262, 262)
@@ -163,11 +151,7 @@ public class GUI extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(234, 234, 234)
                                 .addComponent(jLabel1)))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(DirField, javax.swing.GroupLayout.PREFERRED_SIZE, 456, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -183,16 +167,11 @@ public class GUI extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(jLabel4))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
-                        .addComponent(jLabel5))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(tablaReconToggle)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -284,52 +263,11 @@ public class GUI extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        this.tablaReconToggle.setVisible(true);
-        this.tablaReconToggle.setSelected(true);
-        displayRecon();
+        TablaReconocimiento tr = new TablaReconocimiento(identify(InputField.getText()));
+        tr.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
     
-    private void displayRecon()
-    {
-        ArrayList<String> salida = identify(InputField.getText());
-        
-        DefaultTableModel m = new DefaultTableModel();
-        m.setColumnCount(3);
-        m.setRowCount(salida.size()-1);
-        Grid.setModel(m);
-        JTableHeader th = Grid.getTableHeader();
-        TableColumnModel tcm = th.getColumnModel();
-        String[] Header = salida.get(0).split("\\|");
-        for (int i = 0; i < 3; i++) {            
-            tcm.getColumn(i).setHeaderValue(Header[i]);
-        }
-        salida.remove(0);
-        th.repaint();
-        for (int i = 0; i < salida.size(); i++) {
-            String[] row = salida.get(i).split("\\|");
-            for (int j = 0; j < 3; j++) {
-                Grid.setValueAt(row[j],i,j);
-            }
-        }
-        columnFitter();
-    }
     
-    private void tablaReconToggleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tablaReconToggleActionPerformed
-        // TODO add your handling code here:
-        if(this.tablaReconToggle.isSelected())
-        {
-            //Mostrar tabla de recon
-            this.tablaReconToggle.setText("Ver Tabla M");
-            displayRecon();
-        }
-        else
-        {
-            //Mostrar tabla M
-            this.tablaReconToggle.setText("Ver Tabla de Reconocimiento");
-            tableGraphics();
-        }
-    }//GEN-LAST:event_tablaReconToggleActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -864,101 +802,6 @@ public class GUI extends javax.swing.JFrame {
         TPrimSig.append("\n");
     }
     
-    //Primeros y Siguientes de Ejemplo 1
-    public  void defaultPrimSgte1(){
-        primero = new ArrayList<>();
-        siguiente = new ArrayList<>();
-        int n = noTerms.size();
-        for (int i = 0; i < n; i++) {
-            primero.add(new ArrayList<>());
-            siguiente.add(new ArrayList<>());
-        }
-        primero.get(0).add(terms.get(2));
-        primero.get(0).add(terms.get(3));
-        primero.get(1).add(terms.get(0));
-        primero.get(1).add(EPS);
-        primero.get(2).add(terms.get(2));
-        primero.get(2).add(terms.get(3));
-        primero.get(3).add(terms.get(1));
-        primero.get(3).add(EPS);
-        primero.get(4).add(terms.get(2));
-        primero.get(4).add(terms.get(3));
-        siguiente.get(0).add(END);
-        siguiente.get(0).add(terms.get(4));
-        siguiente.get(1).add(END);
-        siguiente.get(1).add(terms.get(4));
-        siguiente.get(2).add(END);
-        siguiente.get(2).add(terms.get(4));
-        siguiente.get(2).add(terms.get(0));
-        siguiente.get(3).add(END);
-        siguiente.get(3).add(terms.get(4));
-        siguiente.get(3).add(terms.get(0));
-        siguiente.get(4).add(END);
-        siguiente.get(4).add(terms.get(4));
-        siguiente.get(4).add(terms.get(0));
-        siguiente.get(4).add(terms.get(1));
-        System.out.println("Primeros");
-        for (int i = 0; i < n; i++) {
-            String out = "P(" + noTerms.get(i).getSimbolo() + ") = [";
-            for (int j = 0; j < primero.get(i).size()-1; j++) {
-                out += primero.get(i).get(j).getSimbolo() + ", ";
-            }
-            out += primero.get(i).get(primero.get(i).size()-1) + "]";
-            System.out.println(out);
-        }
-        System.out.println("\nSiguientes");
-        for (int i = 0; i < n; i++) {
-            String out = "S(" + noTerms.get(i).getSimbolo() + ") = [";
-            for (int j = 0; j < siguiente.get(i).size()-1; j++) {
-                out += siguiente.get(i).get(j).getSimbolo() + ", ";
-            }
-            out += siguiente.get(i).get(siguiente.get(i).size()-1) + "]";
-            System.out.println(out);
-        }
-        System.out.println("");
-    }
-    
-    //Primeros y Siguientes de Ejemplo 2
-    public  void defaultPrimSgte2(){
-        primero = new ArrayList<>();
-        siguiente = new ArrayList<>();
-        int n = noTerms.size();
-        for (int i = 0; i < n; i++) {
-            primero.add(new ArrayList<>());
-            siguiente.add(new ArrayList<>());
-        }
-        primero.get(0).add(terms.get(0));
-        primero.get(0).add(terms.get(2));
-        primero.get(1).add(terms.get(0));
-        primero.get(1).add(terms.get(2));
-        primero.get(2).add(terms.get(3));
-        primero.get(2).add(EPS);
-        siguiente.get(0).add(END);
-        siguiente.get(0).add(terms.get(1));
-        siguiente.get(0).add(terms.get(3));
-        siguiente.get(1).add(terms.get(1));
-        siguiente.get(2).add(terms.get(1));
-        System.out.println("Primeros");
-        for (int i = 0; i < n; i++) {
-            String out = "P(" + noTerms.get(i).getSimbolo() + ") = [";
-            for (int j = 0; j < primero.get(i).size()-1; j++) {
-                out += primero.get(i).get(j).getSimbolo() + ", ";
-            }
-            out += primero.get(i).get(primero.get(i).size()-1) + "]";
-            System.out.println(out);
-        }
-        System.out.println("\nSiguientes");
-        for (int i = 0; i < n; i++) {
-            String out = "S(" + noTerms.get(i).getSimbolo() + ") = [";
-            for (int j = 0; j < siguiente.get(i).size()-1; j++) {
-                out += siguiente.get(i).get(j).getSimbolo() + ", ";
-            }
-            out += siguiente.get(i).get(siguiente.get(i).size()-1) + "]";
-            System.out.println(out);
-        }
-        System.out.println("");
-    }
-    
     //Obtener el Primero de una Produccion
     public  ArrayList<Simbolo> primProd(Production p){
         ArrayList<Simbolo> prim = new ArrayList<>();
@@ -1085,31 +928,6 @@ public class GUI extends javax.swing.JFrame {
                 }
             }
         }
-    }
-    
-    //Tabla M de Ejemplo
-    public  void defaultMTable(){
-        int fil = noTerms.size();
-        int col = terms.size();
-        mTable = new Production[fil][col];
-        for (int i = 0; i < fil; i++) {
-            for (int j = 0; j < col; j++) {
-                mTable[i][j] = new Production();
-            }
-        }
-        mTable[0][2] = prods.get(0).get(0);
-        mTable[0][3] = prods.get(0).get(0);
-        mTable[1][0] = prods.get(1).get(0);
-        mTable[1][4] = prods.get(1).get(1);
-        mTable[1][5] = prods.get(1).get(1);
-        mTable[2][2] = prods.get(2).get(0);
-        mTable[2][3] = prods.get(2).get(0);
-        mTable[3][1] = prods.get(3).get(0);
-        mTable[3][0] = prods.get(3).get(1);
-        mTable[3][4] = prods.get(3).get(1);
-        mTable[3][5] = prods.get(3).get(1);
-        mTable[4][2] = prods.get(4).get(0);
-        mTable[4][3] = prods.get(4).get(1);
     }
     
     //Imprimir Tabla M
@@ -1285,7 +1103,6 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JToggleButton tablaReconToggle;
     // End of variables declaration//GEN-END:variables
 }
 
